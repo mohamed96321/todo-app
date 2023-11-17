@@ -72,9 +72,40 @@ class TaskListView {
       <div class='flex'>
         <input id="taskInput" type="text" placeholder="Enter a task" />
         <button id="addButton" class="btn btn-primary">Add Task</button>
+        <input id="searchInput" type="text" placeholder="Search for a task" />
+        <button id="searchButton" class="btn btn-primary">Search</button>
       </div>
       <ul id="taskList"></ul>
     `;
+
+    this.searchBtn = document.getElementById('searchButton');
+    this.searchBtn.addEventListener('click', () => {
+      const searchTerm = this.searchInput.value.trim();
+      if (searchTerm) {
+        this.searchTasks(searchTerm);
+      } else {
+        const warningElem = this.container.querySelector('.warning');
+        this.render();
+        if (warningElem) {
+          this.container.removeChild(warningElem);
+        }
+      }
+    });
+
+    this.searchInput = document.getElementById('searchInput');
+    this.searchInput.addEventListener('input', () => {
+      const searchTerm = this.searchInput.value.trim();
+      if (searchTerm) {
+        this.searchTasks(searchTerm);
+      } else {
+        const warningElem = this.container.querySelector('.warning');
+        this.render();
+        if (warningElem) {
+          this.container.removeChild(warningElem);
+        }
+      }
+    });
+
     this.taskInput = document.getElementById('taskInput');
     this.addBtn = document.getElementById('addButton');
     this.taskListElem = document.getElementById('taskList');
@@ -214,8 +245,11 @@ class TaskListView {
       this.taskListElem.appendChild(taskItem);
     });
 
+    const searchElem = document.createElement('div');
+    this.container.appendChild(searchElem);
+
     // Add previous and next buttons
-    const totalPages = Math.ceil(this.taskList.tasks.length / this.pageSize);
+    Math.ceil(this.taskList.tasks.length / this.pageSize);
     const paginationElem = document.createElement('div');
     paginationElem.classList.add('pagination');
     paginationElem.innerHTML = `
@@ -248,6 +282,45 @@ class TaskListView {
     nextBtn.addEventListener('click', () => {
       this.goToNextPage();
     });
+  }
+
+  searchTasks(searchTerm) {
+    const filteredTasks = this.taskList.tasks.filter((task) =>
+      task.text.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    this.taskListElem.innerHTML = '';
+    filteredTasks.forEach((task) => {
+      const taskItem = document.createElement('li');
+      taskItem.classList.add('task-item');
+      taskItem.draggable = true;
+      taskItem.innerHTML = `
+        <input type="text" class="task-text form-control ${
+          task.done ? 'done' : ''
+        }" data-task-id="${task.id}" value="${task.text}" readonly />
+        <button class="delete-button btn btn-danger" data-task-id="${
+          task.id
+        }">Delete</button>
+        <button class="done-button btn btn-success" data-task-id="${task.id}">${
+        task.done ? 'Undone' : 'Done'
+      }</button>
+      `;
+      this.taskListElem.appendChild(taskItem);
+    });
+
+    const warningElem = this.container.querySelector('.warning');
+    if (filteredTasks.length === 0) {
+      if (!warningElem) {
+        const warningElem = document.createElement('div');
+        warningElem.classList.add('warning');
+        warningElem.textContent = 'Task not found.';
+        this.container.appendChild(warningElem);
+      }
+    } else {
+      if (warningElem) {
+        warningElem.remove();
+      }
+    }
   }
 
   goToPreviousPage() {

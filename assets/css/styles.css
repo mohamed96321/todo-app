@@ -1,13 +1,32 @@
 body {
+  font-family: 'Montserrat', sans-serif;
   background-color: #f8f9fa;
 }
 
-.container {
-  max-width: 500px;
-  margin: 50px auto;
-  padding: 20px;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+*,
+::after,
+::before {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.warning {
+  width: 255px;
+  margin: auto;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 20px;
+  background-color: rgb(229, 62, 62);
+  color: white;
+  text-align: center;
+}
+
+#searchInput {
+  margin-right: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 2px solid #0062cc;
 }
 
 h1 {
@@ -108,12 +127,3 @@ h1 {
   cursor: pointer;
 }
 
-.task-item.border-bottom {
-  border-bottom: solid 1px #000;
-  border-top: none;
-}
-
-.task-item.border-top {
-  border-bottom: none;
-  border-top: solid 1px #000;
-}
