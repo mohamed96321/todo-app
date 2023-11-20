@@ -167,15 +167,18 @@ class TaskListView {
         <div class="flex items-center mb-4 mt-2 justify-between">
           <input type="text" class="task-text ${
           task.done ? 'done' : ''
-          } bg-white mr-2 focus:outline-none focus:ring focus:border-blue-500 rounded-lg px-4 py-2 w-full" data-task-id="${task.id}" value="${task.text}" readonly />
+          } bg-white mr-2 focus:outline-none focus:ring 
+          focus:border-blue-500 rounded-lg px-4 py-2 w-full" data-task-id="${task.id}" 
+          value="${task.text}" readonly />
           <div class="flex space-x-2">
-            <button class="delete-button bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg focus:outline-none" data-task-id="${
+          <button class="delete-button bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg focus:outline-none" data-task-id="${
             task.id
-            }">Delete</button>
+            }"><i class="bx bx-trash""></i></button>
             <button class="done-button ${
             task.done ? 'bg-gray-500' : 'bg-green-500 hover:bg-green-600'
-            } text-white px-4 py-2 rounded-lg focus:outline-none" data-task-id="${task.id}">${
-            task.done ? 'Undone' : 'Done'
+            } text-white px-4 py-2 rounded-lg focus:outline-none" 
+            data-task-id="${task.id}">${
+            task.done ? '<i class="bx bx-check-double"></i>' : '<i class="bx bx-check"></i>'
             }</button>
           </div>
         </div>
@@ -196,12 +199,12 @@ class TaskListView {
           this.currentPage === 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'
         } text-white font-medium px-4 py-2 rounded-lg mr-4 ${
           this.currentPage === 1 ? 'pointer-events-none' : ''
-        }">Previous</button>
+        }"><i class="bx bx-chevrons-left"></i></button>
         <button class="next-btn ${
           endIndex >= this.taskList.tasks.length ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'
         } text-white font-medium px-4 py-2 rounded-lg ${
           endIndex >= this.taskList.tasks.length ? 'pointer-events-none' : ''
-        }">Next</button>
+        }"><i class="bx bx-chevrons-right"></i></button>
       </div>
     `;
 
@@ -243,14 +246,15 @@ class TaskListView {
           task.done ? 'done' : ''
           } bg-white mr-2 focus:outline-none focus:ring focus:border-blue-500 rounded-lg px-4 py-2 w-full" data-task-id="${task.id}" value="${task.text}" readonly />
           <div class="flex space-x-2">
-            <button class="delete-button bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg focus:outline-none" data-task-id="${
+          <button class="delete-button bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg focus:outline-none" data-task-id="${
             task.id
-            }">Delete</button>
+            }"><i class="bx bx-trash""></i></button>
             <button class="done-button ${
             task.done ? 'bg-gray-500' : 'bg-green-500 hover:bg-green-600'
-            } text-white px-4 py-2 rounded-lg focus:outline-none" data-task-id="${task.id}">${
-            task.done ? 'Undone' : 'Done'
-            }</button>
+            } text-white px-4 py-2 rounded-lg focus:outline-none" 
+            data-task-id="${task.id}">${
+            task.done ? '<i class="bx bx-check-double"></i>' : '<i class="bx bx-check"></i>'
+            }</button>  
           </div>
         </div>
       `;
