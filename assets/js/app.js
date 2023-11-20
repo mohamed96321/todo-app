@@ -65,32 +65,18 @@ class TaskListView {
     this.container = document.getElementById(containerId);
     this.taskList = taskList;
     this.currentPage = 1;
-    this.pageSize = 6; // Number of tasks to display per page
+    this.pageSize = 8; // Number of tasks to display per page
 
     this.container.innerHTML = `
-      <h1>Todo App</h1>
-      <div class='flex'>
-        <input id="taskInput" type="text" placeholder="Enter a task" />
-        <button id="addButton" class="btn btn-primary">Add Task</button>
-        <input id="searchInput" type="text" placeholder="Search for a task" />
-        <button id="searchButton" class="btn btn-primary">Search</button>
+      <h1 class="text-4xl font-bold mb-4 mt-6">TODO APP</h1>
+      <div class="flex">
+        <input id="taskInput" type="text" placeholder="Enter a task" 
+        class="border border-gray-300 px-4 py-2 rounded-lg w-full mb-4 mr-2">
+        <input id="searchInput" type="text" placeholder="Search for a task" 
+        class="border border-gray-300 px-4 py-2 rounded-lg w-full mb-4">
       </div>
-      <ul id="taskList"></ul>
+      <ul id="taskList" class="w-full max-w-sm"></ul>
     `;
-
-    this.searchBtn = document.getElementById('searchButton');
-    this.searchBtn.addEventListener('click', () => {
-      const searchTerm = this.searchInput.value.trim();
-      if (searchTerm) {
-        this.searchTasks(searchTerm);
-      } else {
-        const warningElem = this.container.querySelector('.warning');
-        this.render();
-        if (warningElem) {
-          this.container.removeChild(warningElem);
-        }
-      }
-    });
 
     this.searchInput = document.getElementById('searchInput');
     this.searchInput.addEventListener('input', () => {
@@ -107,17 +93,7 @@ class TaskListView {
     });
 
     this.taskInput = document.getElementById('taskInput');
-    this.addBtn = document.getElementById('addButton');
     this.taskListElem = document.getElementById('taskList');
-
-    this.addBtn.addEventListener('click', () => {
-      const taskText = this.taskInput.value.trim();
-      if (taskText) {
-        this.taskList.addTask(taskText);
-        this.render();
-        this.taskInput.value = '';
-      }
-    });
 
     this.taskInput.addEventListener('keydown', (event) => {
       if (event.key === 'Enter') {
@@ -161,63 +137,6 @@ class TaskListView {
       }
     });
 
-    this.taskListElem.addEventListener('dragstart', (event) => {
-      event.target.classList.add('dragging');
-    });
-
-    this.taskListElem.addEventListener('dragend', (event) => {
-      event.target.classList.remove('dragging');
-    });
-
-    this.taskListElem.addEventListener('dragover', (event) => {
-      event.preventDefault();
-      const draggingElement = document.querySelector('.dragging');
-      const targetElement = event.target.closest('.task-item');
-      if (targetElement === draggingElement) {
-        return;
-      }
-      if (targetElement) {
-        const rect = targetElement.getBoundingClientRect();
-        const offset = rect.y + rect.height / 2;
-        if (event.clientY - offset > 0) {
-          targetElement.style['border-bottom'] = 'solid 1px #000';
-          targetElement.style['border-top'] = '';
-        } else {
-          targetElement.style['border-bottom'] = '';
-          targetElement.style['border-top'] = 'solid 1px #000';
-        }
-      }
-    });
-
-    this.taskListElem.addEventListener('dragleave', (event) => {
-      const targetElement = event.target.closest('.task-item');
-      if (targetElement) {
-        targetElement.style['border-bottom'] = '';
-        targetElement.style['border-top'] = '';
-      }
-    });
-
-    this.taskListElem.addEventListener('drop', (event) => {
-      event.preventDefault();
-      const draggingElement = document.querySelector('.dragging');
-      const targetElement = event.target.closest('.task-item');
-      const draggingIndex = Array.from(this.taskListElem.children).indexOf(
-        draggingElement
-      );
-      const targetIndex = Array.from(this.taskListElem.children).indexOf(
-        targetElement
-      );
-
-      if (draggingIndex !== targetIndex) {
-        const draggedTask = this.taskList.tasks[draggingIndex];
-        this.taskList.tasks.splice(draggingIndex, 1);
-        this.taskList.tasks.splice(targetIndex, 0, draggedTask);
-        this.taskList.saveTasks();
-      }
-
-      this.render();
-    });
-
     this.render();
   }
 
@@ -232,17 +151,23 @@ class TaskListView {
       taskItem.classList.add('task-item');
       taskItem.draggable = true;
       taskItem.innerHTML = `
-          <input type="text" class="task-text form-control ${
-            task.done ? 'done' : ''
-          }" data-task-id="${task.id}" value="${task.text}" readonly />
-          <button class="delete-button btn btn-danger" data-task-id="${
+        <div class="flex items-center mb-4 mt-2 justify-between">
+          <input type="text" class="task-text ${
+          task.done ? 'done' : ''
+          } bg-white mr-2 focus:outline-none focus:ring focus:border-blue-500 rounded-lg px-4 py-2 w-full" data-task-id="${task.id}" value="${task.text}" readonly />
+          <div class="flex space-x-2">
+            <button class="delete-button bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg focus:outline-none" data-task-id="${
             task.id
-          }">Delete</button>
-          <button class="done-button btn btn-success" data-task-id="${
-            task.id
-          }">${task.done ? 'Undone' : 'Done'}</button>
-        `;
-      this.taskListElem.appendChild(taskItem);
+            }">Delete</button>
+            <button class="done-button ${
+            task.done ? 'bg-gray-500' : 'bg-green-500 hover:bg-green-600'
+            } text-white px-4 py-2 rounded-lg focus:outline-none" data-task-id="${task.id}">${
+            task.done ? 'Undone' : 'Done'
+            }</button>
+          </div>
+        </div>
+      `;
+      this.taskListElem.prepend(taskItem);
     });
 
     const searchElem = document.createElement('div');
@@ -253,12 +178,16 @@ class TaskListView {
     const paginationElem = document.createElement('div');
     paginationElem.classList.add('pagination');
     paginationElem.innerHTML = `
-      <div class="central-div d-flex justify-content-center">
-        <button class="prev-btn btn btn-primary me-2 ${
-          this.currentPage === 1 ? 'disabled' : ''
+      <div class="flex items-center justify-center mt-4">
+        <button class="prev-btn ${
+          this.currentPage === 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'
+        } text-white font-medium px-4 py-2 rounded-lg mr-4 ${
+          this.currentPage === 1 ? 'pointer-events-none' : ''
         }">Previous</button>
-        <button class="next-btn btn btn-primary ${
-          endIndex >= this.taskList.tasks.length ? 'disabled' : ''
+        <button class="next-btn ${
+          endIndex >= this.taskList.tasks.length ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'
+        } text-white font-medium px-4 py-2 rounded-lg ${
+          endIndex >= this.taskList.tasks.length ? 'pointer-events-none' : ''
         }">Next</button>
       </div>
     `;
@@ -294,18 +223,25 @@ class TaskListView {
       const taskItem = document.createElement('li');
       taskItem.classList.add('task-item');
       taskItem.draggable = true;
+      
       taskItem.innerHTML = `
-        <input type="text" class="task-text form-control ${
+        <div class="flex items-center mb-4 mt-2 justify-between">
+          <input type="text" class="task-text ${
           task.done ? 'done' : ''
-        }" data-task-id="${task.id}" value="${task.text}" readonly />
-        <button class="delete-button btn btn-danger" data-task-id="${
-          task.id
-        }">Delete</button>
-        <button class="done-button btn btn-success" data-task-id="${task.id}">${
-        task.done ? 'Undone' : 'Done'
-      }</button>
+          } bg-white mr-2 focus:outline-none focus:ring focus:border-blue-500 rounded-lg px-4 py-2 w-full" data-task-id="${task.id}" value="${task.text}" readonly />
+          <div class="flex space-x-2">
+            <button class="delete-button bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg focus:outline-none" data-task-id="${
+            task.id
+            }">Delete</button>
+            <button class="done-button ${
+            task.done ? 'bg-gray-500' : 'bg-green-500 hover:bg-green-600'
+            } text-white px-4 py-2 rounded-lg focus:outline-none" data-task-id="${task.id}">${
+            task.done ? 'Undone' : 'Done'
+            }</button>
+          </div>
+        </div>
       `;
-      this.taskListElem.appendChild(taskItem);
+      this.taskListElem.prepend(taskItem);
     });
 
     const warningElem = this.container.querySelector('.warning');

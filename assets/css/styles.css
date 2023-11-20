@@ -22,108 +22,11 @@ body {
   text-align: center;
 }
 
-#searchInput {
-  margin-right: 10px;
-  padding: 10px;
-  border-radius: 5px;
-  border: 2px solid #0062cc;
-}
-
-h1 {
-  padding-top: 50px;
-  text-align: center;
-}
-
-.flex {
-  display: flex;
-  margin-bottom: 20px;
-  margin-top: 30px;
-}
-
-#taskInput {
-  flex: 1;
-  margin-right: 20px;
-  margin-left: 40px;
-  padding: 10px;
-  border-radius: 5px;
-  border: 2px solid #0062cc;
-}
-
-.central-div {
-  margin-top: 15px;
-  margin: auto;
-}
-
-.task-item {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  background-color: #f8f9fa;
-  border-radius: 4px;
-  margin-bottom: 10px;
-  margin-right: 20px;
-}
-
-.task-item input {
-  flex: 1;
-  margin-right: 20px;
-  border: none;
-  padding: 10px;
-  background-color: transparent;
-  outline: none;
-}
-
 .task-item input.done {
   text-decoration: line-through;
   color: #868e96;
 }
 
-.delete-button,
-.done-button {
-  margin-left: auto;
-}
-
-.btn-primary {
-  background-color: #007bff;
-  border-color: #007bff;
-  margin-right: 30px;
-}
-
-.btn-primary:hover {
-  background-color: #0069d9;
-  border-color: #0062cc;
-}
-
-.btn-danger {
-  background-color: #dc3545;
-  border-color: #dc3545;
-  margin-right: 10px;
-}
-
-.btn-danger:hover {
-  background-color: #c82333;
-  border-color: #bd2130;
-}
-
-.btn-success {
-  background-color: #28a745;
-  border-color: #28a745;
-}
-
-.btn-success:hover {
-  background-color: #218838;
-  border-color: #1e7e34;
-}
-
-.task-item .drag-handle {
-  cursor: move;
-}
-
-.dragging {
-  opacity: 0.5;
-}
-
 .task-item .task-text {
   cursor: pointer;
 }
-
