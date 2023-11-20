@@ -174,7 +174,7 @@ class TaskListView {
       taskItem.classList.add('task-item');
       taskItem.draggable = true;
       taskItem.innerHTML = `
-        <div class="flex items-center mb-4 mt-2 justify-between">
+        <div class="flex items-center mb-3 mt-2 justify-between">
           <input type="text" class="task-text ${
             task.done ? 'done' : ''
           } bg-white mr-2 focus:outline-none focus:ring 
@@ -208,7 +208,7 @@ class TaskListView {
     const paginationElem = document.createElement('div');
     paginationElem.classList.add('pagination');
     paginationElem.innerHTML = `
-      <div class="flex items-center justify-center mt-4">
+      <div class="flex items-center justify-center mt-2">
         <button class="prev-btn ${
           this.currentPage === 1
             ? 'bg-gray-300 cursor-not-allowed'
