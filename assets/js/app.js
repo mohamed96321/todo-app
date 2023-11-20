@@ -65,17 +65,20 @@ class TaskListView {
     this.container = document.getElementById(containerId);
     this.taskList = taskList;
     this.currentPage = 1;
-    this.pageSize = 8; // Number of tasks to display per page
+    this.pageSize = 6; // Number of tasks to display per page
 
     this.container.innerHTML = `
-      <h1 class="text-4xl font-bold mb-4 mt-6">TODO APP</h1>
-      <div class="flex">
-        <input id="taskInput" type="text" placeholder="Enter a task" 
-        class="border border-gray-300 px-4 py-2 rounded-lg w-full mb-4 mr-2">
-        <input id="searchInput" type="text" placeholder="Search for a task" 
-        class="border border-gray-300 px-4 py-2 rounded-lg w-full mb-4">
+      <div class="flex flex-col items-center mb-2">
+        <h1 class="text-4xl font-bold mb-4 mt-6 text-gray-800">TODO APP</h1>
+        <div class="w-full max-w-md bg-white rounded-lg shadow-xl p-6 mb-4">
+          <div class="flex">
+            <input id="taskInput" type="text" placeholder="Enter a task" class="border border-gray-300 px-4 py-2 rounded-lg w-full mr-2 focus:outline-none" />
+            <button id="addButton" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg focus:outline-none">Add</button>
+          </div>
+          <input id="searchInput" type="text" placeholder="Search for a task" class="border border-gray-300 px-4 py-2 rounded-lg w-full mt-4 focus:outline-none" />
+        </div>
+        <ul id="taskList" class="w-full max-w-md bg-white px-2 rounded-lg shadow-xl"></ul>
       </div>
-      <ul id="taskList" class="w-full max-w-sm"></ul>
     `;
 
     this.searchInput = document.getElementById('searchInput');
@@ -94,6 +97,16 @@ class TaskListView {
 
     this.taskInput = document.getElementById('taskInput');
     this.taskListElem = document.getElementById('taskList');
+    
+    this.addBtn = document.getElementById('addButton');
+    this.addBtn.addEventListener('click', () => {
+      const taskText = this.taskInput.value.trim();
+      if (taskText) {
+        this.taskList.addTask(taskText);
+        this.render();
+        this.taskInput.value = '';
+      }
+    });
 
     this.taskInput.addEventListener('keydown', (event) => {
       if (event.key === 'Enter') {
