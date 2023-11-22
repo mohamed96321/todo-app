@@ -183,9 +183,12 @@ class TaskListView {
           }" 
           value="${task.text}" readonly />
           <div class="flex space-x-2">
-          <button class="delete-button bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg focus:outline-none" data-task-id="${
-            task.id
-          }"><i class="bx bx-trash""></i></button>
+            <button class="delete-button 
+            bg-red-500 hover:bg-red-600 text-white px-4 
+            py-2 rounded-lg focus:outline-none" data-task-id="${
+              task.id
+            }"><i class="bx bx-trash">
+            </i></button>
             <button class="done-button ${
               task.done ? 'bg-gray-500' : 'bg-green-500 hover:bg-green-600'
             } text-white px-4 py-2 rounded-lg focus:outline-none" 
@@ -316,9 +319,34 @@ class TaskListView {
   editTask(taskId, target) {
     const taskItem = target.closest('.task-item');
     const taskTextElem = taskItem.querySelector('.task-text');
+
+    // Store the current task ID in a variable
+    let currentTaskId = taskId;
+
+    // Set the task ID for the current task
+    taskTextElem.dataset.taskId = currentTaskId;
+
     taskTextElem.readOnly = false;
     taskTextElem.focus();
     taskTextElem.setSelectionRange(0, taskTextElem.value.length);
+
+    // Add an event listener to the task text element to detect changes
+    taskTextElem.addEventListener('input', () => {
+      // Check if the value of task-text is empty
+      if (taskTextElem.value.trim() === '') {
+        // Retrieve the last task ID saved in local storage
+        const lastTaskId = localStorage.getItem('lastTaskId');
+
+        // Reset the task ID if a valid last task ID exists
+        if (lastTaskId !== null) {
+          currentTaskId = lastTaskId;
+          taskTextElem.dataset.taskId = currentTaskId;
+        }
+      } else {
+        // Update the last task ID in local storage
+        localStorage.setItem('lastTaskId', currentTaskId);
+      }
+    });
   }
 }
 
