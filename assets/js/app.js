@@ -163,6 +163,35 @@ class TaskListView {
     this.render();
   }
 
+
+  renderTaskItem(task) {
+    const taskItem = document.createElement('li');
+    taskItem.classList.add('task-item');
+    taskItem.innerHTML = `
+      <div class="flex items-center mb-3 mt-2 justify-between">
+        <button class="done-button ${
+          task.done ? 'bg-blue-600 px-2 py-2' : 
+          'border-2 border-blue-600 px-1.5 py-1.5'
+        } rounded-full" 
+        data-task-id="${task.id}"></button>
+        <input type="text" class="task-text ${
+          task.done ? 'done' : ''
+        } bg-white mr-2 ml-1 focus:outline-none focus:ring 
+        focus:border-blue-500 rounded-lg px-1 py-2 w-full" data-task-id="${
+          task.id
+        }" 
+        value="${task.text}" readonly />
+        <div class="flex space-x-2">
+          <button class="delete-button text-red-400 font-semibold px-1
+           focus:outline-none" data-task-id="${
+             task.id
+           }">X</button>
+        </div>
+      </div>
+    `;
+    return taskItem;
+  }
+
   render() {
     const startIndex = (this.currentPage - 1) * this.pageSize;
     const endIndex = startIndex + this.pageSize;
@@ -170,36 +199,7 @@ class TaskListView {
 
     this.taskListElem.innerHTML = '';
     tasksToDisplay.forEach((task) => {
-      const taskItem = document.createElement('li');
-      taskItem.classList.add('task-item');
-      taskItem.draggable = true;
-      taskItem.innerHTML = `
-        <div class="flex items-center mb-3 mt-2 justify-between">
-          <input type="text" class="task-text ${
-            task.done ? 'done' : ''
-          } bg-white mr-2 focus:outline-none focus:ring 
-          focus:border-blue-500 rounded-lg px-4 py-2 w-full" data-task-id="${
-            task.id
-          }" 
-          value="${task.text}" readonly />
-          <div class="flex space-x-2">
-            <button class="delete-button 
-            bg-red-500 hover:bg-red-600 text-white px-4 
-            py-2 rounded-lg focus:outline-none" data-task-id="${
-              task.id
-            }"><i class="bx bx-trash">
-            </i></button>
-            <button class="done-button ${
-              task.done ? 'bg-gray-500' : 'bg-green-500 hover:bg-green-600'
-            } text-white px-4 py-2 rounded-lg focus:outline-none" 
-            data-task-id="${task.id}">${
-        task.done
-          ? '<i class="bx bx-check-double"></i>'
-          : '<i class="bx bx-check"></i>'
-      }</button>
-          </div>
-        </div>
-      `;
+      const taskItem = this.renderTaskItem(task);
       this.taskListElem.prepend(taskItem);
     });
 
@@ -216,16 +216,16 @@ class TaskListView {
           this.currentPage === 1
             ? 'bg-gray-300 cursor-not-allowed'
             : 'bg-blue-500 hover:bg-blue-600'
-        } text-white font-medium px-4 py-2 rounded-lg mr-4 ${
+        } text-white font-semibold px-4 py-2 rounded-lg mr-4 ${
       this.currentPage === 1 ? 'pointer-events-none' : ''
-    }"><i class="bx bx-chevrons-left"></i></button>
+    }"><<</i></button>
         <button class="next-btn ${
           endIndex >= this.taskList.tasks.length
             ? 'bg-gray-300 cursor-not-allowed'
             : 'bg-blue-500 hover:bg-blue-600'
-        } text-white font-medium px-4 py-2 rounded-lg ${
+        } text-white font-semibold px-4 py-2 rounded-lg ${
       endIndex >= this.taskList.tasks.length ? 'pointer-events-none' : ''
-    }"><i class="bx bx-chevrons-right"></i></button>
+    }">>></i></button>
       </div>
     `;
 
@@ -257,32 +257,7 @@ class TaskListView {
 
     this.taskListElem.innerHTML = '';
     filteredTasks.forEach((task) => {
-      const taskItem = document.createElement('li');
-      taskItem.classList.add('task-item');
-      taskItem.draggable = true;
-
-      taskItem.innerHTML = `
-        <div class="flex items-center mb-4 mt-2 justify-between">
-          <input type="text" class="task-text ${
-            task.done ? 'done' : ''
-          } bg-white mr-2 focus:outline-none focus:ring focus:border-blue-500 rounded-lg px-4 py-2 w-full" data-task-id="${
-        task.id
-      }" value="${task.text}" readonly />
-          <div class="flex space-x-2">
-          <button class="delete-button bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg focus:outline-none" data-task-id="${
-            task.id
-          }"><i class="bx bx-trash""></i></button>
-            <button class="done-button ${
-              task.done ? 'bg-gray-500' : 'bg-green-500 hover:bg-green-600'
-            } text-white px-4 py-2 rounded-lg focus:outline-none" 
-            data-task-id="${task.id}">${
-        task.done
-          ? '<i class="bx bx-check-double"></i>'
-          : '<i class="bx bx-check"></i>'
-      }</button>  
-          </div>
-        </div>
-      `;
+      const taskItem = this.renderTaskItem(task);
       this.taskListElem.prepend(taskItem);
     });
 
